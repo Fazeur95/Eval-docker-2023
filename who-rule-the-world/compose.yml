@@ -1,0 +1,48 @@
+services:
+  vote:
+    image: localhost:5000/vote
+    ports:
+      - '5000:80'
+    networks:
+      - front
+      - back
+
+  result:
+    image: localhost:5000/result
+    ports:
+      - '5001:80'
+    networks:
+      - front
+      - back
+
+  worker:
+    image: localhost:5000/worker
+    networks:
+      - back
+
+  redis:
+    image: redis
+    networks:
+      - back
+
+  db:
+    image: postgres
+    environment:
+      POSTGRES_USER: 'postgres'
+      POSTGRES_PASSWORD: 'postgres'
+    volumes:
+      - 'db-data:/var/lib/postgresql/data'
+    networks:
+      - back
+
+  seed-data:
+    image: localhost:5000/seed-data
+    networks:
+      - front
+
+volumes:
+  db-data:
+
+networks:
+  front:
+  back:
